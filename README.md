@@ -1,33 +1,50 @@
 Conversor de Unidades Físicas e Técnicas
 
-Este projeto é um conversor de unidades desenvolvido em JavaScript puro, com foco em correção conceitual, rigor físico e clareza de contexto. O objetivo principal é evitar conversões fisicamente inválidas ou conceitualmente incorretas, algo comum em muitos conversores genéricos disponíveis online.
+Este projeto é um conversor de unidades desenvolvido em JavaScript puro, com foco em correção conceitual, rigor físico e clareza de contexto. O objetivo não é maximizar o número de conversões disponíveis, mas garantir que todas as conversões implementadas sejam fisicamente válidas, bem definidas e explicitamente contextualizadas.
 
-O projeto foi pensado tanto como ferramenta educacional quanto como exercício técnico de programação e modelagem de grandezas físicas.
+O projeto foi finalizado com escopo controlado e decisões técnicas conscientes, priorizando qualidade, legibilidade e confiabilidade.
 
 ────────────────────────────────
 
 Objetivos do Projeto
 
 Criar um conversor de unidades confiável para uso educacional e técnico.
-Garantir que apenas grandezas compatíveis sejam convertidas entre si.
+Evitar conversões fisicamente ou dimensionalmente inválidas.
 Separar corretamente sistemas de unidades distintos, como SI e IEC.
-Fornecer contexto físico explícito quando a conversão depende de hipóteses.
-Servir como projeto de estudo e portfólio em física e programação.
+Fornecer contexto explícito quando uma conversão depende de hipóteses físicas.
+Servir como projeto de estudo, referência técnica e item de portfólio.
 
 ────────────────────────────────
 
 Estrutura do Projeto
 
-O projeto é composto por três arquivos localizados no mesmo diretório:
+O projeto é composto por três arquivos no mesmo diretório:
 
 index.html
-Arquivo responsável pela estrutura da interface e dos elementos visuais.
+Responsável pela estrutura da interface e pela organização das seções.
 
 style.css
-Arquivo responsável pela estilização da interface.
+Responsável pela estilização visual e comportamento de layout.
 
 script.js
-Arquivo responsável por toda a lógica de conversão, validações físicas, histórico e comportamento da interface.
+Responsável por toda a lógica de conversão, validações físicas, histórico, navegação e comportamento interativo.
+
+────────────────────────────────
+
+Navegação
+
+A interface possui um menu de navegação superior que permite acesso direto às principais seções do projeto, sem necessidade de rolagem excessiva.
+
+Seções disponíveis:
+
+Início
+Conversor de Unidades
+Escala
+Histórico
+Sobre o Projeto
+Fontes e Referências
+
+A navegação é feita por âncoras internas com rolagem suave.
 
 ────────────────────────────────
 
@@ -59,7 +76,7 @@ Iluminação:
 
 Iluminância: lux e foot-candle.
 
-Conversões diretas entre candela, lúmen e lux foram removidas, pois dependem de geometria, distribuição espacial e área iluminada, não sendo conversões diretas válidas.
+Conversões diretas entre candela, lúmen e lux não são realizadas, pois dependem de geometria, distribuição espacial e área iluminada.
 
 Radioatividade:
 
@@ -74,34 +91,48 @@ Velocidade Mach com hipótese física explicitada.
 
 ────────────────────────────────
 
+Escala
+
+O projeto inclui uma calculadora de escala geográfica integrada, acessível diretamente pelo menu de navegação.
+
+Validações aplicadas:
+
+Escala maior que zero.
+Distâncias maiores que zero.
+Bloqueio de resultados fisicamente inválidos.
+
+────────────────────────────────
+
 Decisões Conceituais Importantes
 
-Não são realizadas conversões diretas entre lux, lúmen e candela.
+Não são realizadas conversões entre grandezas incompatíveis.
+Lux, lúmen e candela não são convertidos diretamente entre si.
 Mach é tratado como razão adimensional, com referência ao nível do mar a 15 °C.
-Valores negativos de temperatura em Kelvin são bloqueados.
-Escalas e distâncias nulas ou negativas são consideradas inválidas.
+Temperaturas negativas em Kelvin são bloqueadas.
 Torque é tratado como grandeza distinta de força.
-Unidades de dados seguem rigorosamente suas bases (10 para SI, 2 para IEC).
+Unidades de dados seguem rigorosamente suas bases (SI decimal e IEC binário).
 
-Essas decisões foram adotadas para preservar a coerência física e evitar resultados enganosos.
+Algumas funcionalidades informativas, como Dimensões Físicas, foram deliberadamente excluídas por não serem necessárias ao objetivo principal do projeto.
 
 ────────────────────────────────
 
 Validações Implementadas
 
-Bloqueio de temperaturas Kelvin negativas.
-Bloqueio de escalas ou distâncias menores ou iguais a zero.
-Prevenção de conversões fisicamente inválidas.
-Exibição visual de erro quando uma validação falha.
+Bloqueio de valores fisicamente impossíveis.
+Mensagens de erro visuais claras.
+Prevenção de conversões silenciosamente inválidas.
+Validação de entradas antes do cálculo.
 
 ────────────────────────────────
 
 Funcionalidades de Interface
 
-Alternância entre notação decimal padrão e notação científica.
-Histórico de conversões realizadas.
-Restauração de conversões anteriores ao clicar no histórico.
-Interface simples, direta e sem dependências externas.
+Menu de navegação com acesso direto às seções.
+Rolagem suave entre seções.
+Alternância entre notação decimal e notação científica.
+Histórico de conversões.
+Restauração de conversões ao clicar no histórico.
+Interface limpa, direta e sem dependências externas.
 
 ────────────────────────────────
 
@@ -119,11 +150,11 @@ As referências são utilizadas como base conceitual e não como bibliotecas ext
 
 Como Utilizar
 
-Abra o arquivo index.html em um navegador moderno.
-Selecione a categoria de conversão desejada.
-Escolha a unidade de origem e a unidade de destino.
-Insira o valor a ser convertido.
-O resultado será exibido automaticamente, respeitando as validações físicas.
+Abrir o arquivo index.html em um navegador moderno.
+Selecionar a categoria desejada.
+Escolher a unidade de origem e a unidade de destino.
+Inserir o valor a ser convertido.
+Visualizar o resultado respeitando as validações físicas.
 
 ────────────────────────────────
 
@@ -137,6 +168,16 @@ Não são utilizados frameworks ou bibliotecas externas.
 
 ────────────────────────────────
 
+Estado do Projeto
+
+O projeto encontra-se finalizado.
+O escopo está fechado.
+Novas funcionalidades só devem ser adicionadas se houver justificativa física e técnica clara.
+
+────────────────────────────────
+
 Observação Final
 
-Este projeto prioriza correção física e clareza conceitual, mesmo quando isso implica remover conversões que seriam convenientes, porém incorretas. O foco não é oferecer todas as conversões possíveis, mas apenas aquelas que fazem sentido do ponto de vista físico e dimensional.
+Este conversor prioriza coerência física, clareza conceitual e honestidade técnica. A escolha consciente de não implementar determinadas conversões ou funcionalidades faz parte do projeto e reforça sua confiabilidade.
+
+O objetivo não é ser o maior conversor possível, mas um conversor correto.
