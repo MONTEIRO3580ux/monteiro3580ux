@@ -195,7 +195,7 @@ const nomes = {
     "comprimento": { "m": "Metro", "km": "Quilômetro", "cm": "Centímetro", "mm": "Milímetro", "µm": "Micrômetro", "nm": "Nanômetro", "mi": "Milha", "yd": "Jarda", "ft": "Pé", "in": "Polegada", "milha náutica": "Milha náutica", "ano-luz": "Ano-luz", "parsec (pc)": "Parsec", "UA (Unidade Astronômica)": "Unidade Astronômica" },
     "dados_si (decimal)": { "byte (B)": "Byte", "kilobyte (kB)": "Kilobyte (10³)", "megabyte (MB)": "Megabyte (10⁶)", "gigabyte (GB)": "Gigabyte (10⁹)", "terabyte (TB)": "Terabyte (10¹²)", "petabyte (PB)": "Petabyte (10¹⁵)", "bit": "Bit" },
     "dados_iec (binário)": { "byte (B)": "Byte", "kibibyte (KiB)": "Kibibyte (2¹⁰)", "mebibyte (MiB)": "Mebibyte (2²⁰)", "gibibyte (GiB)": "Gibibyte (2³⁰)", "tebibyte (TiB)": "Tebibyte (2⁴⁰)", "pebibyte (PiB)": "Pebibyte (2⁵⁰)", "bit": "Bit" },
-    "energia": { "J": "Joule", "kJ": "Quilojoule", "MJ": "Megajoule", "cal": "Caloria", "kcal": "Quilocaloria", "Wh": "Watt-hora", "kWh": "Quilowatt-hora", "BTU": "BTU", "er": "Erg", "eV": "Elétron-volt" },
+    "energia": { "J": "Joule", "kJ": "Quilojoule", "MJ": "Megajoule", "cal": "Caloria", "kcal": "Quilocaloria", "Wh": "Watt-hora", "kWh": "Quilowatt-hora", "BTU": "BTU", "erg": "Erg", "eV": "Elétron-volt" },
     "força": { "N": "Newton", "kN": "Quilonewton", "kgf": "Quilograma-força", "lbf": "Libra-força", "dina": "Dina" },
     "torque": { "N·m": "Newton-metro", "kgf·m": "Quilograma-força metro", "lbf·ft (libra-pé)": "Libra-força pé" },
     "frequência": { "Hz": "Hertz", "kHz": "Quilohertz", "MHz": "Megahertz", "GHz": "Gigahertz", "THz": "Terahertz", "rpm": "Rotações por minuto" },
@@ -218,10 +218,54 @@ let forceSciNotation = false;
 
 // --- Funções Principais ---
 
+// --- Dados Educacionais ---
+const siBaseUnits = {
+    "ângulo": "radiano (rad)",
+    "área": "metro quadrado (m²)",
+    "comprimento": "metro (m)",
+    "dados_si (decimal)": "byte (B)", // Base prática
+    "dados_iec (binário)": "byte (B)",
+    "energia": "joule (J)",
+    "força": "newton (N)",
+    "torque": "newton-metro (N·m)",
+    "frequência": "hertz (Hz)",
+    "iluminação (lux)": "lux (lx)",
+    "massa": "quilograma (kg)",
+    "potência": "watt (W)",
+    "pressão": "pascal (Pa)",
+    "radioatividade (atividade)": "becquerel (Bq)",
+    "radioatividade (dose)": "gray (Gy) / sievert (Sv)",
+    "temperatura": "kelvin (K)",
+    "tempo": "segundo (s)",
+    "velocidade": "metro por segundo (m/s)",
+    "volume": "metro cúbico (m³)",
+    "vazão": "metro cúbico por segundo (m³/s)"
+};
+
+const categoryWarnings = {
+    "temperatura": "Nota: Escalas de temperatura têm origens diferentes (0°C ≠ 0°F), não apenas fatores multiplicativos.",
+    "velocidade": "Nota: 'Mach' depende da temperatura e pressão do meio. Valor padronizado para nível do mar a 15°C.",
+    "iluminação (lux)": "Nota: Conversões simplificadas. Fluxo luminoso real depende da geometria da fonte e distância."
+};
+
+// --- Funções Principais ---
+
 function atualizarUnidades() {
     const categoria = document.getElementById("categoria").value;
     const de = document.getElementById("de");
     const para = document.getElementById("para");
+    const siInfoStr = siBaseUnits[categoria] ? `Unidade Base SI: <strong>${siBaseUnits[categoria]}</strong>` : "";
+    const warningStr = categoryWarnings[categoria] || "";
+
+    document.getElementById("siBaseInfo").innerHTML = siInfoStr;
+    const warningDiv = document.getElementById("warningMessage");
+
+    if (warningStr) {
+        warningDiv.innerText = warningStr;
+        warningDiv.style.display = "block";
+    } else {
+        warningDiv.style.display = "none";
+    }
 
     de.innerHTML = "";
     para.innerHTML = "";
@@ -237,7 +281,7 @@ function atualizarUnidades() {
 
     keys.forEach(unidade => {
         // Obter nome legível ou usar a chave
-        const label = nomes[categoria][unidade] || unit;
+        const label = nomes[categoria][unidade] || unidade;
         const op1 = new Option(label, unidade);
         const op2 = new Option(label, unidade);
         de.appendChild(op1);
@@ -253,6 +297,9 @@ function atualizarUnidades() {
     // Defaults específicos
     if (categoria === "temperatura") { de.value = "C"; para.value = "F"; }
     else if (categoria.startsWith("dados")) { de.value = "megabyte (MB)" || de.options[0].value; para.value = "gigabyte (GB)" || para.options[1].value; }
+
+    // Limpar erros visuais ao trocar categoria
+    clearErrorStyles();
 }
 
 function formatarNumero(num) {
@@ -303,6 +350,9 @@ function converter() {
     errorDiv.style.display = 'none';
     resultadoDiv.innerText = '';
 
+    // Limpar erro visual anterior
+    valorInput.classList.remove("input-error");
+
     if (isNaN(valor)) {
         resultadoDiv.innerText = "Digite um valor válido.";
         return;
@@ -315,8 +365,6 @@ function converter() {
             resultado = converterTemperatura(valor, de, para);
         } else {
             // Valu * Factor_De / Factor_Para (Considerando que fatores são para unidade BASE SI)
-            // Ex: km (1000) -> m (1).  10 * 1000 / 1 = 10000.
-            // Ex: m (1) -> km (1000). 10000 * 1 / 1000 = 10.
             const fatorDe = unidades[categoria][de];
             const fatorPara = unidades[categoria][para];
             if (!fatorDe || !fatorPara) throw new Error("Fator de conversão não encontrado.");
@@ -349,7 +397,24 @@ function converter() {
     } catch (e) {
         errorDiv.innerText = e.message;
         errorDiv.style.display = 'block';
+        // Feedback visual no input
+        valorInput.classList.add("input-error");
     }
+}
+
+function clearInputs() {
+    const valorInput = document.getElementById("valor");
+    valorInput.value = "";
+    document.getElementById("resultado").innerText = "";
+    document.getElementById("error-message").style.display = "none";
+    clearErrorStyles();
+    valorInput.focus();
+}
+
+function clearErrorStyles() {
+    document.getElementById("valor").classList.remove("input-error");
+    // Limpar inputs de escala também se necessário (não centralizado aqui, mas boa prática)
+    document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
 }
 
 function swapUnits() {
@@ -455,6 +520,8 @@ function toggleSources() {
 
 // --- Lógica Geográfica ---
 
+// --- Lógica Geográfica ---
+
 function updateScaleUI() {
     const mode = document.getElementById("scaleMode").value;
     const container = document.getElementById("inputContainer");
@@ -533,15 +600,33 @@ function calculateGeoScale() {
 
     const toCm = { 'km': 100000, 'm': 100, 'cm': 1, 'mm': 0.1 };
 
+    // Limpar erros visuais
+    document.querySelectorAll('#inputContainer input').forEach(el => el.classList.remove('input-error'));
+
     try {
         if (mode === 'escala') {
-            const mapDist = parseFloat(document.getElementById("geoMapDist").value);
+            const mapDistInput = document.getElementById("geoMapDist");
+            const realDistInput = document.getElementById("geoRealDist");
+
+            const mapDist = parseFloat(mapDistInput.value);
             const mapUnit = document.getElementById("geoMapUnit").value;
-            const realDist = parseFloat(document.getElementById("geoRealDist").value);
+            const realDist = parseFloat(realDistInput.value);
             const realUnit = document.getElementById("geoRealUnit").value;
 
             if (!mapDist || !realDist) throw new Error("Preencha todos os campos.");
-            if (mapDist <= 0 || realDist <= 0) throw new Error("Distâncias devem ser positivas.");
+
+            let hasError = false;
+            // Validações individuais para feedback preciso
+            if (mapDist <= 0) {
+                mapDistInput.classList.add("input-error");
+                hasError = true;
+            }
+            if (realDist <= 0) {
+                realDistInput.classList.add("input-error");
+                hasError = true;
+            }
+
+            if (hasError) throw new Error("Distâncias devem ser positivas.");
 
             const mapDistCm = mapDist * toCm[mapUnit];
             const realDistCm = realDist * toCm[realUnit];
@@ -550,14 +635,26 @@ function calculateGeoScale() {
             resultDiv.innerText = `Escala: 1:${Math.round(scale).toLocaleString('pt-BR')}`;
 
         } else if (mode === 'real') {
-            const scale = parseFloat(document.getElementById("geoScale").value);
-            const mapDist = parseFloat(document.getElementById("geoMapDist").value);
+            const scaleInput = document.getElementById("geoScale");
+            const mapDistInput = document.getElementById("geoMapDist");
+
+            const scale = parseFloat(scaleInput.value);
+            const mapDist = parseFloat(mapDistInput.value);
             const mapUnit = document.getElementById("geoMapUnit").value;
             const outUnit = document.getElementById("geoResultUnit").value;
 
             if (!scale || !mapDist) throw new Error("Preencha todos os campos.");
-            if (scale <= 0) throw new Error("Escala deve ser positiva.");
-            if (mapDist <= 0) throw new Error("Distância no mapa deve ser positiva.");
+
+            let hasError = false;
+            if (scale <= 0) {
+                scaleInput.classList.add("input-error");
+                hasError = true;
+            }
+            if (mapDist <= 0) {
+                mapDistInput.classList.add("input-error");
+                hasError = true;
+            }
+            if (hasError) throw new Error("Valores devem ser positivos.");
 
             const mapDistCm = mapDist * toCm[mapUnit];
             const realDistCm = scale * mapDistCm;
@@ -566,14 +663,26 @@ function calculateGeoScale() {
             resultDiv.innerText = `Distância Real: ${finalVal.toLocaleString('pt-BR')} ${outUnit}`;
 
         } else if (mode === 'mapa') {
-            const scale = parseFloat(document.getElementById("geoScale").value);
-            const realDist = parseFloat(document.getElementById("geoRealDist").value);
+            const scaleInput = document.getElementById("geoScale");
+            const realDistInput = document.getElementById("geoRealDist");
+
+            const scale = parseFloat(scaleInput.value);
+            const realDist = parseFloat(realDistInput.value);
             const realUnit = document.getElementById("geoRealUnit").value;
             const outUnit = document.getElementById("geoResultUnit").value;
 
             if (!scale || !realDist) throw new Error("Preencha todos os campos.");
-            if (scale <= 0) throw new Error("Escala deve ser positiva.");
-            if (realDist <= 0) throw new Error("Distância real deve ser positiva.");
+
+            let hasError = false;
+            if (scale <= 0) {
+                scaleInput.classList.add("input-error");
+                hasError = true;
+            }
+            if (realDist <= 0) {
+                realDistInput.classList.add("input-error");
+                hasError = true;
+            }
+            if (hasError) throw new Error("Valores devem ser positivos.");
 
             const realDistCm = realDist * toCm[realUnit];
             const mapDistCm = realDistCm / scale;
@@ -604,6 +713,29 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("themeToggle").addEventListener('click', toggleDarkMode);
     document.getElementById("clearHistory").addEventListener('click', clearHistory);
     document.getElementById("sciNotationCheck").addEventListener('change', toggleSciNotation);
+
+    // Configurar scroll spy para navegação ativa
+    const sections = document.querySelectorAll("section, footer");
+    const navLinks = document.querySelectorAll(".main-nav a");
+
+    window.addEventListener("scroll", () => {
+        let current = "";
+        sections.forEach((section) => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            // Ajuste de offset para o navbar fixo
+            if (pageYOffset >= sectionTop - 150) {
+                current = section.getAttribute("id");
+            }
+        });
+
+        navLinks.forEach((a) => {
+            a.classList.remove("active");
+            if (a.getAttribute("href").includes(current)) {
+                a.classList.add("active");
+            }
+        });
+    });
 
     atualizarUnidades();
     updateHistoryDisplay();

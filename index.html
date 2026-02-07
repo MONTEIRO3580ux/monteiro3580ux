@@ -4,81 +4,100 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Conversor Universal de Unidades - Ferramenta Essencial para Estudantes</title>
+  <title>Conversor de Unidades Físicas e Técnicas - Ferramenta Essencial para Estudantes</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <div class="container">
+    <nav class="main-nav">
+      <ul>
+        <li><a href="#conversor">Conversor</a></li>
+        <li><a href="#escala">Escala Geográfica</a></li>
+        <li><a href="#documentacao">Documentação</a></li>
+      </ul>
+    </nav>
+
     <div class="controls">
-      <div style="font-size: 14px; color: var(--secondary-text)">v2.1 Refatorado</div>
+      <div style="font-size: 14px; color: var(--secondary-text)">v2.2 Navegação Aprimorada</div>
       <button class="theme-toggle" id="themeToggle">🌑</button>
     </div>
 
-    <h1>Conversor Universal de Unidades</h1>
+    <h1>Conversor de Unidades Físicas e Técnicas</h1>
     <p class="description">
       Converta rapidamente entre diversas unidades. Agora com correções conceituais SI / IEC, novas categorias de Torque
       e Radioatividade, e validações precisas.
     </p>
 
-    <div class="student-banner">
-      <h3 style="margin-top: 0; color: inherit;">✨ Ferramenta Essencial para Estudantes ✨</h3>
-      <p>Este conversor foi atualizado com padrões técnicos rigorosos:</p>
+    <section id="conversor">
+      <div class="student-banner">
+        <h3 style="margin-top: 0; color: inherit;">✨ Ferramenta Essencial para Estudantes ✨</h3>
+        <p>Este conversor foi atualizado com padrões técnicos rigorosos:</p>
 
-      <div class="student-highlights">
-        <div class="student-highlight">
-          <strong>Dados (SI vs IEC)</strong><br>
-          Diferencia KB (1000 bytes) de KiB (1024 bytes).
-        </div>
-        <div class="student-highlight">
-          <strong>Física Precisa</strong><br>
-          Novas categorias de Torque e Radioatividade (Dose vs Atividade).
-        </div>
-        <div class="student-highlight">
-          <strong>Validação Lógica</strong><br>
-          Bloqueia temperaturas abaixo de 0K e escalas impossíveis.
+        <div class="student-highlights">
+          <div class="student-highlight">
+            <strong>Dados (SI vs IEC)</strong><br>
+            <span>Diferencia KB (1000 bytes) de KiB (1024 bytes).</span>
+          </div>
+          <div class="student-highlight">
+            <strong>Física Precisa</strong><br>
+            <span>Novas categorias de Torque e Radioatividade (Dose vs Atividade).</span>
+          </div>
+          <div class="student-highlight">
+            <strong>Validação Lógica</strong><br>
+            <span>Bloqueia temperaturas abaixo de 0K e escalas impossíveis.</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <label for="categoria">Categoria:</label>
-    <select id="categoria" onchange="atualizarUnidades()"></select>
+      <label for="categoria">Categoria:</label>
+      <select id="categoria" onchange="atualizarUnidades()"></select>
 
-    <label for="valor">Valor:</label>
-    <input type="number" id="valor" placeholder="Digite o valor" />
+      <label for="valor">Valor:</label>
+      <input type="number" id="valor" placeholder="Digite o valor" />
 
-    <label for="de">Converter de:</label>
-    <select id="de"></select>
+      <label for="de">Converter de:</label>
+      <select id="de"></select>
 
-    <button class="button-swap" onclick="swapUnits()">↕ Trocar Unidades</button>
+      <button class="button-swap" onclick="swapUnits()">↕ Trocar Unidades</button>
 
-    <label for="para">Para:</label>
-    <select id="para"></select>
+      <label for="para">Para:</label>
+      <select id="para"></select>
 
-    <div class="sci-notation-toggle">
-      <input type="checkbox" id="sciNotationCheck">
-      <label for="sciNotationCheck" style="margin:0; font-weight:normal; display:inline;">Forçar notação
-        científica</label>
-    </div>
+      <div class="sci-notation-toggle">
+        <input type="checkbox" id="sciNotationCheck">
+        <label for="sciNotationCheck" style="margin:0; font-weight:normal; display:inline;">Forçar notação
+          científcia</label>
+      </div>
 
-    <button onclick="converter()">Converter</button>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="converter()" style="flex: 2;">Converter</button>
+        <button onclick="clearInputs()" style="flex: 1; background-color: #6c757d;">Limpar</button>
+      </div>
 
-    <div id="resultado"></div>
-    <div id="error-message" class="error-message"></div>
+      <div id="resultado"></div>
+      <div id="siBaseInfo" style="text-align: center; margin-top: 10px; font-size: 14px; color: var(--secondary-text);">
+      </div>
+      <div id="warningMessage" class="warning-message"
+        style="display: none; text-align: center; margin-top: 10px; color: var(--warning-text); background-color: var(--warning-bg); padding: 8px; border-radius: 5px;">
+      </div>
+      <div id="error-message" class="error-message"></div>
 
-    <div class="history-header">
-      <div class="history-title">Histórico de Conversões</div>
-      <button class="clear-history" id="clearHistory">Limpar Histórico</button>
-    </div>
+      <div class="history-header">
+        <div class="history-title">Histórico de Conversões</div>
+        <button class="clear-history" id="clearHistory">Limpar Histórico</button>
+      </div>
 
-    <div class="history-container">
-      <div style="font-size: 12px; color: var(--secondary-text); margin-bottom: 5px;">Clique em um item para restaurar a
-        conversão.</div>
-      <div id="historyList"></div>
-    </div>
+      <div class="history-container">
+        <div style="font-size: 12px; color: var(--secondary-text); margin-bottom: 5px;">Clique em um item para restaurar
+          a
+          conversão.</div>
+        <div id="historyList"></div>
+      </div>
+    </section>
 
     <!-- Calculadora de Escala Geográfica -->
-    <div class="scale-calculator-section">
+    <section id="escala" class="scale-calculator-section">
       <h3 style="text-align: center; color: var(--text-color); margin-bottom: 5px;">🌍 Calculadora de Escala Geográfica
       </h3>
       <p class="description" style="margin-bottom: 20px;">Validações físicas aplicadas.</p>
@@ -96,9 +115,9 @@
 
       <button onclick="calculateGeoScale()" style="margin-top: 15px;">Calcular</button>
       <div id="geoResult"></div>
-    </div>
+    </section>
 
-    <footer>
+    <footer id="documentacao">
       <button class="sources-toggle" onclick="toggleSources()">Ver fontes e referências</button>
       <div class="sources-container" id="sourcesContainer">
         <ul class="sources-list">
