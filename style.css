@@ -384,3 +384,92 @@ footer {
     padding-left: 20px;
     text-align: left;
 }
+
+/* Responsive Design */
+.cx-button-group {
+    display: flex;
+    gap: 10px;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+        padding-top: 110px;
+        /* More space for stacked nav if needed, or just safe area */
+    }
+
+    .container {
+        padding: 20px;
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    .main-nav ul {
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .main-nav a {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .theme-toggle {
+        align-self: flex-end;
+        margin-top: -30px;
+        /* Pull it back up to sit next to version text if we want, or let it flow */
+    }
+
+    /* Let's keep theme toggle generally accessible. 
+       Actually, `align-items: flex-start` with column direction puts them on separate lines.
+       Let's try a better approach: keep row but allow wrap */
+    .controls {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .sci-notation-toggle {
+        margin-top: 10px;
+    }
+
+    .student-highlights {
+        flex-direction: column;
+    }
+
+    .student-highlight {
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-top: 120px;
+        /* Nav might wrap 2 lines */
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    .cx-button-group {
+        flex-direction: column;
+    }
+
+    .cx-button-group button {
+        width: 100%;
+    }
+
+    button {
+        padding: 15px;
+        /* Larger touch targets */
+    }
+}
