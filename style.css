@@ -1,0 +1,648 @@
+:root {
+    --primary-color: #0077cc;
+    --primary-hover: #005fa3;
+    --bg-color: white;
+    --text-color: #2c3e50;
+    --secondary-text: #555;
+    --border-color: #ccc;
+    --bg-gradient-start: #74ebd5;
+    --bg-gradient-end: #ACB6E5;
+    --history-bg: #f8f9fa;
+    --history-border: #e9ecef;
+    --student-banner-bg: #e3f2fd;
+    --student-banner-border: #2196F3;
+    --student-banner-text: #0d47a1;
+    --student-highlight-bg: #f5f5f5;
+    --error-color: #d9534f;
+    --warning-bg: #fff3cd;
+    --warning-text: #856404;
+}
+
+.dark-mode {
+    --primary-color: #4da6ff;
+    --primary-hover: #1a8cff;
+    --bg-color: #2c3e50;
+    --text-color: #f8f9fa;
+    --secondary-text: #adb5bd;
+    --border-color: #495057;
+    --bg-gradient-start: #1e3c72;
+    --bg-gradient-end: #2a5298;
+    --history-bg: #343a40;
+    --history-border: #495057;
+    --student-banner-bg: #0d3c61;
+    --student-banner-border: #64b5f6;
+    --student-banner-text: #bbdefb;
+    --student-highlight-bg: #37474f;
+    --warning-bg: #2c270d;
+    --warning-text: #ffda6a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, var(--bg-gradient-start), var(--bg-gradient-end));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    padding-top: 80px;
+    /* Space for fixed nav */
+    color: var(--text-color);
+    transition: background 0.3s ease, color 0.3s ease;
+    scroll-behavior: smooth;
+}
+
+/* Navigation Styles */
+.main-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--bg-color);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 10px 0;
+    transition: background 0.3s ease;
+}
+
+.main-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: bold;
+    font-size: 16px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: color 0.3s, background 0.3s;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.input-error {
+    border-color: var(--error-color) !important;
+    box-shadow: 0 0 5px rgba(217, 83, 79, 0.5);
+    animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    50% {
+        transform: translateX(5px);
+    }
+
+    75% {
+        transform: translateX(-5px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* Scroll adjustments */
+section {
+    scroll-margin-top: 100px;
+    margin-bottom: 40px;
+    background-color: var(--bg-color);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--history-border);
+}
+
+footer {
+    scroll-margin-top: 100px;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+    font-size: 26px;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+p.description {
+    text-align: center;
+    font-size: 16px;
+    color: var(--secondary-text);
+    margin-bottom: 30px;
+}
+
+.student-banner {
+    background-color: var(--student-banner-bg);
+    border-left: 5px solid var(--student-banner-border);
+    padding: 15px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    color: var(--student-banner-text);
+}
+
+.student-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.student-highlight {
+    flex: 1;
+    min-width: 200px;
+    background-color: var(--student-highlight-bg);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 15px;
+    color: var(--text-color);
+}
+
+select,
+input,
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    margin-top: 5px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 10px;
+    transition: 0.3s;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+select:focus,
+input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.2);
+}
+
+.unit-search {
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    border-radius: 8px;
+    background-color: var(--history-bg);
+    border: 1px dashed var(--border-color);
+}
+
+.unit-search:focus {
+    border: 1px solid var(--primary-color);
+    background-color: var(--bg-color);
+}
+
+button {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 119, 204, 0.3);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 119, 204, 0.4);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.button-swap {
+    background-color: var(--history-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    margin: 5px 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding: 0;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.button-swap:hover {
+    background-color: var(--student-highlight-bg);
+    transform: rotate(180deg);
+}
+
+.button-swap:active {
+    transform: scale(0.9) rotate(180deg);
+}
+
+.resultado-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    min-height: 40px;
+}
+
+#resultado,
+#geoResult {
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+    color: var(--text-color);
+    /* Evita pulo de layout */
+}
+
+.copy-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    width: auto;
+    margin: 0;
+    display: none; /* Só exibe quando há resultado */
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.copy-btn:hover {
+    background-color: var(--history-bg);
+    transform: scale(1.1);
+}
+
+.copy-btn:active {
+    transform: scale(0.9);
+}
+
+.copy-btn.copied {
+    color: #28a745;
+}
+
+.quick-conversions {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.quick-card {
+    background-color: var(--history-bg);
+    border: 1px solid var(--history-border);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: inline-block;
+}
+
+.quick-card strong {
+    color: var(--primary-color);
+}
+
+.error-message {
+    color: var(--error-color);
+    font-weight: bold;
+    margin-top: 5px;
+    font-size: 14px;
+    display: none;
+    /* Oculto por padrão */
+}
+
+.history-container {
+    margin-top: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid var(--history-border);
+    border-radius: 10px;
+    padding: 10px;
+    background-color: var(--history-bg);
+}
+
+.history-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.history-item {
+    padding: 8px;
+    border-bottom: 1px solid var(--history-border);
+    font-size: 14px;
+    cursor: pointer;
+    /* Indica interatividade */
+    transition: background-color 0.2s;
+}
+
+.history-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode .history-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.history-item:last-child {
+    border-bottom: none;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Alinhamento vertical central */
+    margin-bottom: 15px;
+}
+
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 24px;
+    padding: 5px;
+    width: auto;
+    /* reset */
+    margin: 0;
+}
+
+.clear-history {
+    background-color: #dc3545;
+    width: auto;
+    padding: 8px 15px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.clear-history:hover {
+    background-color: #c82333;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.scale-calculator-section,
+.currency-calculator-section {
+    margin-top: 40px;
+    padding-top: 30px;
+}
+
+/* Modal de Histórico de Versões */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 2000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0,0,0,0.5); 
+    backdrop-filter: blur(2px);
+}
+
+.modal-content {
+    background-color: var(--bg-color);
+    margin: 5% auto; 
+    padding: 25px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    position: relative;
+    border: 1px solid var(--border-color);
+}
+
+.close-modal {
+    color: var(--secondary-text);
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-modal:hover {
+    color: var(--text-color);
+}
+
+.version-item {
+    background-color: var(--history-bg);
+    border: 1px solid var(--history-border);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.version-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.version-num {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.version-name {
+    font-weight: bold;
+    color: var(--text-color);
+    font-size: 16px;
+}
+
+.version-list {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 14px;
+    color: var(--secondary-text);
+}
+
+.version-list li {
+    margin-bottom: 5px;
+}
+
+/* Checkbox estilizado para Notação Científica */
+.sci-notation-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.sci-notation-toggle input {
+    width: auto;
+    margin: 0;
+}
+
+/* Rodapé com fontes */
+footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: var(--secondary-text);
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+}
+
+.sources-toggle {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0;
+    width: auto;
+    display: inline;
+}
+
+.sources-container {
+    display: none;
+    /* Oculto por padrão */
+    margin-top: 10px;
+    padding: 10px;
+    background-color: var(--history-bg);
+    border-radius: 5px;
+}
+
+.sources-list {
+    margin: 0;
+    padding-left: 20px;
+    text-align: left;
+}
+
+/* Responsive Design */
+.cx-button-group {
+    display: flex;
+    gap: 10px;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+        padding-top: 110px;
+        /* More space for stacked nav if needed, or just safe area */
+    }
+
+    .container {
+        padding: 20px;
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    .main-nav ul {
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .main-nav a {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .theme-toggle {
+        align-self: flex-end;
+        margin-top: -30px;
+        /* Pull it back up to sit next to version text if we want, or let it flow */
+    }
+
+    /* Let's keep theme toggle generally accessible. 
+       Actually, `align-items: flex-start` with column direction puts them on separate lines.
+       Let's try a better approach: keep row but allow wrap */
+    .controls {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .sci-notation-toggle {
+        margin-top: 10px;
+    }
+
+    .student-highlights {
+        flex-direction: column;
+    }
+
+    .student-highlight {
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-top: 120px;
+        /* Nav might wrap 2 lines */
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    .cx-button-group {
+        flex-direction: column;
+    }
+
+    .cx-button-group button {
+        width: 100%;
+    }
+
+    button {
+        padding: 15px;
+        /* Larger touch targets */
+    }
+}

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0077cc">
+  <title>Conversor Universal de Unidades - Ferramenta Essencial para Estudantes</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.png" type="image/png">
+  <link rel="apple-touch-icon" href="icon.png">
+</head>
+
+<body>
+  <div class="container">
+    <nav class="main-nav">
+      <ul>
+        <li><a href="#conversor">Conversor</a></li>
+        <li><a href="#moedas">Câmbio</a></li>
+        <li><a href="#escala">Escala Geográfica</a></li>
+        <li><a href="#documentacao">Documentação</a></li>
+        <li><a href="#" onclick="openVersionModal(event)">Versões</a></li>
+      </ul>
+    </nav>
+
+    <div class="controls">
+      <div style="font-size: 14px; color: var(--secondary-text); font-weight: bold;">v4.0 Arquitetura Modular</div>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleDarkMode()" aria-label="Alternar modo claro e escuro">🌑</button>
+    </div>
+
+    <h1>Conversor Universal de Unidades</h1>
+    <p class="description">
+      Converta rapidamente entre diversas unidades. Agora com correções conceituais SI / IEC, novas categorias de Torque
+      e Radioatividade, e validações precisas.
+    </p>
+
+    <section id="conversor">
+      <div class="student-banner">
+        <h3 style="margin-top: 0; color: inherit;">✨ Ferramenta Essencial para Estudantes ✨</h3>
+        <p>Este conversor foi atualizado com padrões técnicos rigorosos:</p>
+
+        <div class="student-highlights">
+          <div class="student-highlight">
+            <strong>Dados (SI vs IEC)</strong><br>
+            <span>Diferencia KB (1000 bytes) de KiB (1024 bytes).</span>
+          </div>
+          <div class="student-highlight">
+            <strong>Física Precisa</strong><br>
+            <span>Novas categorias de Torque e Radioatividade (Dose vs Atividade).</span>
+          </div>
+          <div class="student-highlight">
+            <strong>Validação Lógica</strong><br>
+            <span>Bloqueia temperaturas abaixo de 0K e escalas impossíveis.</span>
+          </div>
+        </div>
+      </div>
+
+      <label for="categoria">Categoria:</label>
+      <select id="categoria" onchange="atualizarUnidades()"></select>
+
+      <label for="valor">Valor:</label>
+      <input type="number" id="valor" placeholder="Digite o valor" onclick="this.select()" />
+
+      <label for="de">Converter de:</label>
+      <input type="text" id="buscaDe" class="unit-search" placeholder="🔍 Filtrar unidade..." oninput="filtrarOpcoes('de', this.value)" />
+      <select id="de" onchange="converter()"></select>
+
+      <div style="text-align: center; margin: 10px 0;">
+        <button class="button-swap" onclick="swapUnits()" title="Trocar Unidades">⇅</button>
+      </div>
+
+      <label for="para">Para:</label>
+      <input type="text" id="buscaPara" class="unit-search" placeholder="🔍 Filtrar unidade..." oninput="filtrarOpcoes('para', this.value)" />
+      <select id="para" onchange="converter()"></select>
+
+      <div class="sci-notation-toggle">
+        <input type="checkbox" id="sciNotationCheck" onchange="toggleSciNotation()">
+        <label for="sciNotationCheck" style="margin:0; font-weight:normal; display:inline;">Transformar em notação
+          científica</label>
+      </div>
+
+      <div class="cx-button-group">
+        <button onclick="converter()" style="flex: 2;">Converter</button>
+        <button onclick="clearInputs()" style="flex: 1; background-color: #6c757d;">Limpar</button>
+      </div>
+
+      <div class="resultado-container">
+        <div id="resultado"></div>
+        <button id="copyBtn" class="copy-btn" onclick="copyToClipboard('copyBtn')" title="Copiar resultado" aria-label="Copiar resultado">📋</button>
+      </div>
+      <div id="quickConversions" class="quick-conversions"></div>
+      <div id="siBaseInfo" style="text-align: center; margin-top: 10px; font-size: 14px; color: var(--secondary-text);">
+      </div>
+      <div id="warningMessage" class="warning-message"
+        style="display: none; text-align: center; margin-top: 10px; color: var(--warning-text); background-color: var(--warning-bg); padding: 8px; border-radius: 5px;">
+      </div>
+      <div id="error-message" class="error-message"></div>
+
+      <div class="history-header">
+        <div class="history-title">Histórico de Conversões</div>
+        <button class="clear-history" id="clearHistory" onclick="clearHistory()">Limpar Histórico</button>
+      </div>
+
+      <div class="history-container">
+        <div style="font-size: 12px; color: var(--secondary-text); margin-bottom: 5px;">Clique em um item para restaurar
+          a
+          conversão.</div>
+        <div id="historyList"></div>
+      </div>
+    </section>
+
+    <!-- Câmbio de Moedas -->
+    <section id="moedas" class="currency-calculator-section">
+      <h3 style="text-align: center; color: var(--text-color); margin-bottom: 5px;">💸 Câmbio Global de Moedas</h3>
+      <p class="description" style="margin-bottom: 20px;">Taxas atualizadas pela ExchangeRate-API em tempo real.</p>
+
+      <label for="valorMoeda">Valor:</label>
+      <input type="number" id="valorMoeda" placeholder="Digite o valor" onclick="this.select()" />
+
+      <label for="deMoeda">De:</label>
+      <input type="text" id="buscaDeMoeda" class="unit-search" placeholder="🔍 Filtrar moeda..." oninput="filtrarOpcoesMoeda('deMoeda', this.value)" />
+      <select id="deMoeda" onchange="converterMoeda()"></select>
+
+      <div style="text-align: center; margin: 10px 0;">
+        <button class="button-swap" onclick="swapMoedas()" title="Inverter Moedas">⇅</button>
+      </div>
+
+      <label for="paraMoeda">Para:</label>
+      <input type="text" id="buscaParaMoeda" class="unit-search" placeholder="🔍 Filtrar moeda..." oninput="filtrarOpcoesMoeda('paraMoeda', this.value)" />
+      <select id="paraMoeda" onchange="converterMoeda()"></select>
+
+      <div class="cx-button-group" style="margin-top: 15px;">
+        <button onclick="converterMoeda()" style="flex: 2;">Converter Câmbio</button>
+      </div>
+
+      <div class="resultado-container">
+        <div id="resultadoMoeda"></div>
+        <button id="copyBtnMoeda" class="copy-btn" onclick="copyToClipboard('copyBtnMoeda')" title="Copiar resultado" aria-label="Copiar resultado câmbio">📋</button>
+      </div>
+      <div id="quickConversionsMoeda" class="quick-conversions"></div>
+      <div id="error-message-moeda" class="error-message"></div>
+    </section>
+
+    <!-- Calculadora de Escala Geográfica -->
+    <section id="escala" class="scale-calculator-section">
+      <h3 style="text-align: center; color: var(--text-color); margin-bottom: 5px;">🌍 Calculadora de Escala Geográfica
+      </h3>
+      <p class="description" style="margin-bottom: 20px;">Validações físicas aplicadas.</p>
+
+      <label for="scaleMode">O que você deseja calcular?</label>
+      <select id="scaleMode" onchange="updateScaleUI()">
+        <option value="escala">Calcular a Escala (E)</option>
+        <option value="real">Calcular Distância Real (D)</option>
+        <option value="mapa">Calcular Distância no Mapa (d)</option>
+      </select>
+
+      <div id="inputContainer">
+        <!-- Inputs serão injetados aqui via JS -->
+      </div>
+
+      <button onclick="calculateGeoScale()" style="margin-top: 15px;">Calcular</button>
+      <div class="resultado-container">
+        <div id="geoResult"></div>
+        <button id="copyBtnGeo" class="copy-btn" onclick="copyToClipboard('copyBtnGeo')" title="Copiar resultado" aria-label="Copiar resultado geográfico">📋</button>
+      </div>
+    </section>
+
+    <footer id="documentacao">
+      <button class="sources-toggle" onclick="toggleSources()">Ver fontes e referências</button>
+      <div class="sources-container" id="sourcesContainer">
+        <ul class="sources-list">
+          <li><strong>SI (Sistema Internacional)</strong>: BIPM (Bureau International des Poids et Mesures), padrões ISO
+            80000.</li>
+          <li><strong>Dados</strong>: Padrão IEC 80000-13 para prefixos binários (KiB, MiB) versus decimais SI (kB, MB).
+          </li>
+          <li><strong>Estados Unidos</strong>: NIST Handbook 44 para conversões imperiais (lb, oz, ft).</li>
+          <li><strong>Iluminação</strong>: Categoria simplificada para Iluminância (Lux, fc) pois fluxo e intensidade
+            dependem de geometria.</li>
+          <li><strong>Temperatura</strong>: Zero absoluto validado a 0 K (-273.15 °C).</li>
+          <li><strong>Constantes Físicas</strong>:
+            <ul>
+              <li>Velocidade da Luz (c) = 299.792.458 m/s (exata).</li>
+              <li>gravidade padrão (gn) = 9.80665 m/s².</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </footer>
+
+    <!-- Histórico de Versões Modal -->
+    <div id="versionModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal" role="button" aria-label="Fechar histórico de versões" onclick="closeVersionModal()">&times;</span>
+        <h3 style="text-align: center; color: var(--text-color); margin-top: 0; margin-bottom: 20px;">📜 Histórico de Versões</h3>
+        
+        <div class="version-item">
+          <div class="version-header">
+            <span class="version-num">v4.0</span>
+            <span class="version-name">Arquitetura Modular</span>
+          </div>
+          <ul class="version-list">
+            <li><strong>Código Refatorado:</strong> Lógica do aplicativo dividida em módulos separados para melhor manutenção e velocidade.</li>
+            <li><strong>Acessibilidade:</strong> Adicionados rótulos (aria-labels) para leitores de tela em botões visuais.</li>
+          </ul>
+        </div>
+
+        <div class="version-item">
+          <div class="version-header">
+            <span class="version-num">v3.0</span>
+            <span class="version-name">Conectividade PWA</span>
+          </div>
+          <ul class="version-list">
+            <li><strong>Aplicativo Instalável:</strong> O conversor agora é um Progressive Web App (PWA). Você pode instalá-mo no seu celular ou computador!</li>
+            <li><strong>Suporte Offline:</strong> O layout, conversões locais e escalas geográficas funcionam perfeitamente sem internet.</li>
+          </ul>
+        </div>
+
+        <div class="version-item">
+          <div class="version-header">
+            <span class="version-num">v2.5</span>
+            <span class="version-name">Mercado Global</span>
+          </div>
+          <ul class="version-list">
+            <li><strong>Moedas em Tempo Real:</strong> Integração com a ExchangeRate-API para buscar taxas de câmbio de todo o mundo.</li>
+            <li><strong>Cache Inteligente:</strong> As taxas de câmbio são salvas no navegador por 24 horas para garantir que você possa converter offline.</li>
+          </ul>
+        </div>
+
+        <div class="version-item">
+          <div class="version-header">
+            <span class="version-num">v2.4</span>
+            <span class="version-name">Experiência Expandida</span>
+          </div>
+          <ul class="version-list">
+            <li><strong>Novas Categorias:</strong> Culinária (Xícaras, Colheres) e Consumo de Combustível (km/L, MPG).</li>
+            <li><strong>Busca Inteligente:</strong> Filtros de texto adicionados aos menus suspensos de unidades.</li>
+            <li><strong>Conversões Rápidas:</strong> Painel sugerindo conversões automáticas para unidades comuns da mesma categoria.</li>
+          </ul>
+        </div>
+
+        <div class="version-item">
+          <div class="version-header">
+            <span class="version-num">v2.3</span>
+            <span class="version-name">Atualização Ágil</span>
+          </div>
+          <ul class="version-list">
+            <li><strong>Melhoria de UX:</strong> Seleção automática do texto ao clicar no campo de valor.</li>
+            <li><strong>Botão de Troca:</strong> Novo design minimalista para o botão de inverter unidades.</li>
+            <li><strong>Copiar Resultado:</strong> Novo botão para copiar a conversão para a área de transferência rapidamente.</li>
+            <li><strong>Histórico de Versões:</strong> Adicionada esta seção para acompanhar a evolução do projeto.</li>
+          </ul>
+        </div>
+
+        <div class="version-item">
+          <div class="version-header">
+            <span class="version-num">v2.2</span>
+            <span class="version-name">Navegação Aprimorada</span>
+          </div>
+          <ul class="version-list">
+            <li><strong>Validação Física:</strong> Bloqueio de temperaturas abaixo de 0K e distâncias negativas.</li>
+            <li><strong>Novas Categorias:</strong> Adição de Torque e Radioatividade (Dose vs Atividade).</li>
+            <li><strong>Correção SI vs IEC:</strong> Diferenciação correta entre unidades de base decimal (KB, MB) e binária (KiB, MiB) para dados.</li>
+          </ul>
+        </div>
+
+        <div class="version-item">
+          <div class="version-header">
+            <span class="version-num">v2.0</span>
+            <span class="version-name">Expansão Geográfica</span>
+          </div>
+          <ul class="version-list">
+            <li><strong>Novo Recurso:</strong> Calculadora de Escala Geográfica adicionada.</li>
+            <li><strong>Notação Científica:</strong> Opção para forçar notação científica no resultado.</li>
+            <li><strong>Melhorias:</strong> Responsividade aprimorada para dispositivos móveis.</li>
+          </ul>
+        </div>
+
+        <div class="version-item">
+          <div class="version-header">
+            <span class="version-num">v1.0</span>
+            <span class="version-name">Lançamento Base</span>
+          </div>
+          <ul class="version-list">
+            <li><strong>Conversor Universal:</strong> Primeira versão com suporte a Múltiplas Categorias (Comprimento, Área, Massa, etc).</li>
+            <li><strong>Histórico:</strong> Salvamento de histórico local (LocalStorage).</li>
+            <li><strong>Dark Mode:</strong> Suporte a tema escuro/claro.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  <script src="js/constants.js"></script>
+  <script src="js/converter.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/currency.js"></script>
+  <script src="js/geoScale.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
